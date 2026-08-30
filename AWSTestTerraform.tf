@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "aws_vpc" "scmvpc" {
-  cidr_block = ["10.0.0.0/16"]
+  cidr_block = "10.0.0.0/16"
 }
 
 resource "aws_subnet" "scmsubnet" {
@@ -26,7 +26,7 @@ resource "aws_internet_gateway" "scmgw" {
 
 resource "aws_route_table" "scmroutetable" {
   vpc_id = aws_vpc.scmvpc.id
-  route = {
+  route {
     cidr_block = "0.0.0.0/0"   
     gateway_id = aws_internet_gateway.scmgw.id 
 }
@@ -65,10 +65,10 @@ resource "aws_security_group" "scmsg" {
 }
 
 resource "aws_instance" "scminstance" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+  ami           = "ami-0b6d9d3d33ba97d99"
+  instance_type = "c7i-flex.large"
   subnet_id     = aws_subnet.scmsubnet.id
-  security_groups = [aws_security_group.scmsg.name]
+  vpc_security_group_ids = [aws_security_group.scmsg.id]
 
   associate_public_ip_address = "true"
   availability_zone = "us-east-1a"
